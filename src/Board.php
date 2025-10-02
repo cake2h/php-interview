@@ -2,6 +2,7 @@
 
 class Board {
     private $figures = [];
+    private $isBlackTurn = false;
 
     public function __construct() {
         $this->figures['a'][1] = new Rook(false);
@@ -51,10 +52,20 @@ class Board {
         $xTo   = $match[3];
         $yTo   = $match[4];
 
-        if (isset($this->figures[$xFrom][$yFrom])) {
-            $this->figures[$xTo][$yTo] = $this->figures[$xFrom][$yFrom];
+        if (!isset($this->figures[$xFrom][$yFrom])) {
+            throw new \Exception("Incorrect move");
         }
+
+        $movingFigure = $this->figures[$xFrom][$yFrom];
+
+        if ($movingFigure->isBlack() !== $this->isBlackTurn) {
+            throw new \Exception("Incorrect move");
+        }
+
+        $this->figures[$xTo][$yTo] = $movingFigure;
         unset($this->figures[$xFrom][$yFrom]);
+
+        $this->isBlackTurn = !$this->isBlackTurn;
     }
 
     public function dump() {
