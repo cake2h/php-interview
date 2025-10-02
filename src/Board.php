@@ -62,10 +62,18 @@ class Board {
             throw new \Exception("Incorrect move");
         }
 
+        if (!$movingFigure->canMove($xFrom, (int)$yFrom, $xTo, (int)$yTo, $this)) {
+            throw new \Exception("Incorrect move");
+        }
+
         $this->figures[$xTo][$yTo] = $movingFigure;
         unset($this->figures[$xFrom][$yFrom]);
 
         $this->isBlackTurn = !$this->isBlackTurn;
+    }
+
+    public function getFigureAt($x, $y) {
+        return $this->figures[$x][$y] ?? null;
     }
 
     public function dump() {
